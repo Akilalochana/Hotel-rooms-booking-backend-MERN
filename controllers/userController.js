@@ -19,6 +19,32 @@ export function registerUser(req, res){
       })
 }
 
-// export function getUsers(req, res){
-//       User
-// }
+export function logingUser(req, res){
+      const data = req.body;
+
+      User.findOne({
+            email: data.email
+      }).then(
+            (user)=>{
+                  if(user==null){
+                        res.status(404).json({
+                              message:"User not found"
+                        })
+                  }else{
+                        
+                        const isPasswordCorrect = bcrypt.compareSync(data.password,user.password);
+
+                        if(isPasswordCorrect){
+                              res.json({
+                                    message:"User logged in successfully"
+                              })
+                        }else{
+                              res.status(401).json({
+                                    error:"Invalid password"
+                              })
+                        }
+                           
+                  }
+            }
+      )
+}
