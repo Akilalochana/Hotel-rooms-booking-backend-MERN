@@ -30,12 +30,12 @@ const productSchema = new mongoose.Schema({
       availability:{
             type: Boolean,
             required: true,
-            default: true
+            default: true 
       },
       image: {
             type: [String],
             required: true,
-            default:["https://www.w3schools.com/howto/img_paris.jpg"]
+            default:["https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg"]
             
       }
 })

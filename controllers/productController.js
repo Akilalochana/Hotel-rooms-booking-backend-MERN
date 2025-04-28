@@ -35,14 +35,14 @@ export async function getProducts(req, res){
       let isAdmin = isItAdmin(req);
 
       try{
-            if(isAdmin){
-              const products = await Product.find();
-              res.json(products);
-              return;
+            if(isItAdmin){
+                  const products = await Product.find();
+                  res.status(200).json(products);
+                  return
             }else{
-                  const products = await Product.find({availability:true});
-                  res.json(products);
-                  return;
+                  const products =await Product.find({availability:true});
+                  res.status(200).json(products);     
+                  return
             }
             
 
@@ -99,4 +99,26 @@ export async function deleteProduct(req, res){
                   message:"faild to delete room details"
             })
       }
+}
+
+export async function getProductById(req, res){
+      try{
+            const key = req.params.key;
+
+            const product = await Product.findOne({key:key});
+      
+            if(product == null){    
+                  res.status(404).json({
+                        message:"Product not found"
+                  })
+                  return
+            }else{
+                  res.status(200).json(product);
+            }
+      }catch(e){
+            res.status(500).json({
+                  message:"faild to get room details"
+            })
+      }
+     
 }
