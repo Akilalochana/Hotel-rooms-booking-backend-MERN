@@ -9,6 +9,8 @@ import reviewRouter from './routes/reviewRouter.js';
 import inquiriesRouter from './routes/inquirRouter.js';
 import cors from 'cors';
 import orderRouter from './routes/orderRouter.js';
+import bookingRouter from './routes/bookingRouter.js';
+
 
 dotenv.config();
 
@@ -50,6 +52,9 @@ app.use("/api/products", productRouter)
 app.use("/api/reviews", reviewRouter)
 app.use("/api/inquiries", inquiriesRouter)
 app.use("/api/orders", orderRouter)
+app.use("/api/bookings", bookingRouter)
+
+
 
 
 app.listen(3000, ()=>{
