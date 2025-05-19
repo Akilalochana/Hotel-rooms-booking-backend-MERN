@@ -1,5 +1,6 @@
 import Booking from "../models/booking.js";
 import Product from "../models/product.js";
+import { isItAdmin } from "./userController.js";
 
 export async function createBooking(req, res) {
   const data = req.body;
@@ -84,5 +85,26 @@ export async function createBooking(req, res) {
     res.status(500).json({
       message: "Failed to create booking",
     });
+  }
+}
+
+export async function getBookings(req, res){
+  try{
+    if(isItAdmin){
+          const bookings = await Booking.find();
+          res.status(200).json(bookings);
+          return
+    }else{
+      const data = req.body;
+
+      const bookings = await Booking.find({email:data.email});
+      res.status(200).json(bookings);
+
+    }
+
+  }catch(err){
+    res.status(500).json({
+      error:"Booking fetching failed"
+    })
   }
 }
