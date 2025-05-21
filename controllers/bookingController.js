@@ -89,22 +89,31 @@ export async function createBooking(req, res) {
 }
 
 export async function getBookings(req, res){
-  try{
-    if(isItAdmin){
-          const bookings = await Booking.find();
-          res.status(200).json(bookings);
-          return
-    }else{
-      const data = req.body;
-
-      const bookings = await Booking.find({email:data.email});
-      res.status(200).json(bookings);
-
+  try {
+    // Ensure user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ message: "Please login and try again" });
     }
 
-  }catch(err){
+    const email = req.user.email;
+
+    // Optional: check for admin
+    const admin = await isItAdmin(req.user.email);
+
+    if (admin) {
+      const bookings = await Booking.find(); // Admin gets all bookings
+      return res.status(200).json(bookings);
+    } else {
+      const bookings = await Booking.find({ email }); // User gets only their bookings
+      if (bookings.length === 0) {
+        return res.status(200).json({ message: "You haven’t booked yet.", bookings: [] });
+      }
+      return res.status(200).json({ bookings });
+    }
+
+  } catch (err) {
     res.status(500).json({
-      error:"Booking fetching failed"
-    })
+      error: "Booking fetching failed"
+    });
   }
 }
